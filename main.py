@@ -3,7 +3,7 @@ from simple_facerec import SimpleFacerec
 
 # Encode faces from the specified folder
 sfr = SimpleFacerec()
-sfr.load_encoding_images("/Users/vladpavlovich/Downloads/FaceDataSet/Original Images/Original Images/")
+sfr.load_encoding_images("/Users/vladpavlovich/Desktop/FaceImages/Original Images/Original Images/")
 
 # Load Camera
 cap = cv2.VideoCapture(0)
