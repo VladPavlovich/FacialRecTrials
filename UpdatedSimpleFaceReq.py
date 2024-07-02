@@ -6,10 +6,11 @@ import pickle
 
 
 class SimpleFacerec:
-    def __init__(self):
+    def __init__(self, threshold=0.8):
         self.known_face_encodings = []
         self.known_face_names = []
         self.frame_resizing = 0.25
+        self.threshold = threshold
 
     def load_encoding_images(self, images_path, encodings_file="encodings.pkl"):
         # Load encodings if they exist
@@ -79,13 +80,13 @@ class SimpleFacerec:
 
         face_names = []
         for face_encoding in face_encodings:
-            matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding)
+            matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding, tolerance=self.threshold)
             name = "Unknown"
 
             # Use the known face with the smallest distance to the new face
             face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)
             best_match_index = np.argmin(face_distances)
-            if matches[best_match_index]:
+            if matches[best_match_index] and face_distances[best_match_index] < self.threshold:
                 name = self.known_face_names[best_match_index]
 
             face_names.append(name)
@@ -97,8 +98,8 @@ class SimpleFacerec:
         return face_locations, face_names
 
 
-# Initialize SimpleFacerec
-sfr = SimpleFacerec()
+# Initialize SimpleFacerec with a specific threshold value
+sfr = SimpleFacerec(threshold=0.5)  # Adjust the threshold value here
 sfr.load_encoding_images("/Users/vladpavlovich/Desktop/FaceImages/Original Images/Original Images/")
 
 # Load Camera
