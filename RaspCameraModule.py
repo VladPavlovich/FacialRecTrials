@@ -4,15 +4,12 @@ import os
 import numpy as np
 import pickle
 import time
-from picamera2 import picamera2
-from picamera2.array import NDArrayMetadata
+from picamera2 import picamera2 
 
+# ... (Rest of your SimpleFacerec class code)
 
-class SimpleFacerec:
-    # ... (rest of the class code remains the same)
-
-# Initialize SimpleFacerec with a specific threshold value
-sfr = SimpleFacerec(threshold=0.5)  # Adjust the threshold value here
+# Initialize SimpleFacerec
+sfr = SimpleFacerec(threshold=0.5) 
 sfr.load_encoding_images("/Users/vladpavlovich/Desktop/FaceImages/Original Images/Original Images/")
 
 # Initialize picamera2
@@ -22,7 +19,7 @@ picam2.configure(camera_config)
 picam2.start()
 
 while True:
-    frame = picam2.capture_array("main")  # Capture frame as a NumPy array
+    frame = picam2.capture_array("main") # Capture directly as NumPy array
 
     try:
         # Detect Faces
@@ -42,18 +39,7 @@ while True:
     if key & 0xFF == ord('q'):
         break
     elif key & 0xFF == ord('n'):
-        # Capture current frame for new face encoding
-        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        face_encodings = face_recognition.face_encodings(rgb_frame)
-
-        if face_encodings:
-            # Assume only one face to add
-            new_encoding = face_encodings[0]
-            # Prompt for the name in the console
-            name = input("Enter name: ")
-            sfr.known_face_encodings.append(new_encoding)
-            sfr.known_face_names.append(name)
-            sfr.save_encodings()  # Save the new encoding
+        # ... (Your code for adding new faces)
 
 cv2.destroyAllWindows()
 picam2.stop()
