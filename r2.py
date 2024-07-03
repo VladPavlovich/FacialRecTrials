@@ -42,4 +42,4 @@ while True:
         # ... (Your code for adding new faces)
 
 # cv2.destroyAllWindows()
-picam2.stop()
+# picam2.stop()
