@@ -104,8 +104,8 @@ sfr.load_encoding_images(
 
 # Initialize the camera
 picam2 = Picamera2()
-# config = picam2.create_preview_configuration(main={"size": (640, 480)})
-# picam2.configure(config)
+config = picam2.create_preview_configuration(main={"size": (640, 480)})
+picam2.configure(config)
 picam2.start()
 
 time.sleep(2)  # Allow the camera to warm up
@@ -126,7 +126,7 @@ while True:
     except Exception as e:
         print(f"Error processing frame: {e}")
 
-    cv2.imshow("Frame", frame)
+    # cv2.imshow("Frame", frame)
 
     key = cv2.waitKey(1)
     if key & 0xFF == ord("q"):
