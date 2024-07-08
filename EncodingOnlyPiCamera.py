@@ -5,6 +5,7 @@ import numpy as np
 import pickle
 from picamera2 import Picamera2, Preview
 import time
+import keyboard
 
 class SimpleFacerec:
     def __init__(self, threshold=0.8):
@@ -72,7 +73,9 @@ picam2.start()
 
 time.sleep(2)  # Allow the camera to warm up
 
-while True:
+typedkey = "";
+
+while typedkey == "":
     frame = picam2.capture_array()
 
     try:
@@ -106,5 +109,9 @@ while True:
             sfr.known_face_encodings.append(new_encoding)
             sfr.known_face_names.append(name)
             sfr.save_encodings()  # Save the new encoding
+    if keyboard.read_key() == "o";
+        typedkey = "o";
 
+picam2.close();
+print("Camera has been turned off");
 cv2.destroyAllWindows()
