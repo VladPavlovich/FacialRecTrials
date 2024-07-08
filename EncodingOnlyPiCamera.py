@@ -109,7 +109,7 @@ while typedkey == "":
             sfr.known_face_encodings.append(new_encoding)
             sfr.known_face_names.append(name)
             sfr.save_encodings()  # Save the new encoding
-    if keyboard.read_key() == "o":
+    if raw_input() == "o":
         typedkey = "o"
 
 picam2.close()
