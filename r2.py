@@ -80,6 +80,7 @@ typedkey = "";
 
 while typedkey == "":
     frame = picam2.capture_array()
+    start_time = time.time()
 
     try:
         # Detect Faces
@@ -90,7 +91,9 @@ while typedkey == "":
             # Display the results
             cv2.putText(frame, name, (x1, y1 - 10), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 255), 2)
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 255), 2)
-            print(f"Recognized: {name}")  # Print the recognized name to the terminal
+            end_time = time.time()
+            print(f"Recognized: {name}, time elapsed: {end_time - start_time}")  # Print the recognized name to the terminal
+            
     except Exception as e:
         print(f"Error processing frame: {e}")
 
