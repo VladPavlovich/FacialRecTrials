@@ -119,6 +119,8 @@ while typedkey == "":
     if x == "r":
         typedkey = "o"
 
+termios.tcsetattr(sys.stdin, termios.TCSADRAIN, filedescriptors)
 picam2.close()
 print("Camera has been turned off")
+
 cv2.destroyAllWindows()
