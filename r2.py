@@ -77,6 +77,7 @@ filedescriptors = termios.tcgetattr(sys.stdin)
 tty.setcbreak(sys.stdin)
 x = 0
 typedkey = "";
+print("!~Starting up camera~!")
 
 while typedkey == "":
     frame = picam2.capture_array()
