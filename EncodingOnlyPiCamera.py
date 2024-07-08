@@ -5,7 +5,6 @@ import numpy as np
 import pickle
 from picamera2 import Picamera2, Preview
 import time
-import tty, sys, termios
 
 class SimpleFacerec:
     def __init__(self, threshold=0.8):
@@ -73,12 +72,7 @@ picam2.start()
 
 time.sleep(2)  # Allow the camera to warm up
 
-filedescriptors = termios.tcgetattr(sys.stdin)
-tty.setcbreak(sys.stdin)
-x = 0
-typedkey = "";
-
-while typedkey == "":
+while True:
     frame = picam2.capture_array()
 
     try:
@@ -112,15 +106,5 @@ while typedkey == "":
             sfr.known_face_encodings.append(new_encoding)
             sfr.known_face_names.append(name)
             sfr.save_encodings()  # Save the new encoding
-    x=sys.stdin.read(1)[0]      
-    print("You pressed", x)
-    if x == "r":
-        print("If condition is met")
-    if x == "r":
-        typedkey = "o"
-
-termios.tcsetattr(sys.stdin, termios.TCSADRAIN, filedescriptors)
-picam2.close()
-print("Camera has been turned off")
 
 cv2.destroyAllWindows()
