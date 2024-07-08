@@ -5,7 +5,7 @@ import numpy as np
 import pickle
 from picamera2 import Picamera2, Preview
 import time
-import keyboard
+
 
 class SimpleFacerec:
     def __init__(self, threshold=0.8):
