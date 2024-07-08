@@ -109,9 +109,9 @@ while typedkey == "":
             sfr.known_face_encodings.append(new_encoding)
             sfr.known_face_names.append(name)
             sfr.save_encodings()  # Save the new encoding
-    if keyboard.read_key() == "o";
-        typedkey = "o";
+    if keyboard.read_key() == "o"
+        typedkey = "o"
 
-picam2.close();
-print("Camera has been turned off");
+picam2.close()
+print("Camera has been turned off")
 cv2.destroyAllWindows()
