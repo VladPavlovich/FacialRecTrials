@@ -6,6 +6,7 @@ import pickle
 from picamera2 import Picamera2, Preview
 import time
 
+
 class SimpleFacerec:
     def __init__(self, threshold=0.8):
         self.known_face_encodings = []
@@ -15,7 +16,7 @@ class SimpleFacerec:
 
     def load_encoding_images(self, images_path, encodings_file="encodings.pkl"):
         if os.path.exists(encodings_file):
-            with open(encodings_file, 'rb') as f:
+            with open(encodings_file, "rb") as f:
                 self.known_face_encodings, self.known_face_names = pickle.load(f)
             print(f"Loaded encodings from {encodings_file}")
             return
@@ -25,7 +26,7 @@ class SimpleFacerec:
 
         for dirpath, dnames, fnames in os.walk(images_path):
             for f in fnames:
-                if f.endswith(('.jpg', '.jpeg', '.png')):
+                if f.endswith((".jpg", ".jpeg", ".png")):
                     img_path = os.path.join(dirpath, f)
                     print(f"Loading image {img_path}")
 
@@ -51,29 +52,40 @@ class SimpleFacerec:
                     except Exception as e:
                         print(f"Could not process image {img_path}: {e}")
 
-        with open(encodings_file, 'wb') as f:
+        with open(encodings_file, "wb") as f:
             pickle.dump((self.known_face_encodings, self.known_face_names), f)
         print(f"Saved encodings to {encodings_file}")
 
     def save_encodings(self, encodings_file="encodings.pkl"):
-        with open(encodings_file, 'wb') as f:
+        with open(encodings_file, "wb") as f:
             pickle.dump((self.known_face_encodings, self.known_face_names), f)
         print(f"Saved encodings to {encodings_file}")
 
     def detect_known_faces(self, frame):
-        small_frame = cv2.resize(frame, (0, 0), fx=self.frame_resizing, fy=self.frame_resizing)
+        small_frame = cv2.resize(
+            frame, (0, 0), fx=self.frame_resizing, fy=self.frame_resizing
+        )
         rgb_small_frame = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
         face_locations = face_recognition.face_locations(rgb_small_frame)
-        face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+        face_encodings = face_recognition.face_encodings(
+            rgb_small_frame, face_locations
+        )
 
         face_names = []
         for face_encoding in face_encodings:
-            matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding, tolerance=self.threshold)
+            matches = face_recognition.compare_faces(
+                self.known_face_encodings, face_encoding, tolerance=self.threshold
+            )
             name = "Unknown"
 
-            face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)
+            face_distances = face_recognition.face_distance(
+                self.known_face_encodings, face_encoding
+            )
             best_match_index = np.argmin(face_distances)
-            if matches[best_match_index] and face_distances[best_match_index] < self.threshold:
+            if (
+                matches[best_match_index]
+                and face_distances[best_match_index] < self.threshold
+            ):
                 name = self.known_face_names[best_match_index]
 
             face_names.append(name)
@@ -86,12 +98,14 @@ class SimpleFacerec:
 
 # Initialize SimpleFacerec with a specific threshold value
 sfr = SimpleFacerec(threshold=0.5)
-sfr.load_encoding_images("/Users/vladpavlovich/Desktop/FaceImages/Original Images/Original Images/")
+sfr.load_encoding_images(
+    "/Users/vladpavlovich/Desktop/FaceImages/Original Images/Original Images/"
+)
 
 # Initialize the camera
 picam2 = Picamera2()
-config = picam2.create_preview_configuration(main={"size": (640, 480)})
-picam2.configure(config)
+# config = picam2.create_preview_configuration(main={"size": (640, 480)})
+# picam2.configure(config)
 picam2.start()
 
 time.sleep(2)  # Allow the camera to warm up
@@ -104,7 +118,9 @@ while True:
         for face_loc, name in zip(face_locations, face_names):
             y1, x2, y2, x1 = face_loc[0], face_loc[1], face_loc[2], face_loc[3]
 
-            cv2.putText(frame, name, (x1, y1 - 10), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 255), 2)
+            cv2.putText(
+                frame, name, (x1, y1 - 10), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 255), 2
+            )
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 255), 2)
             print(f"Recognized: {name}")  # Print the recognized name to the terminal
     except Exception as e:
@@ -113,9 +129,9 @@ while True:
     cv2.imshow("Frame", frame)
 
     key = cv2.waitKey(1)
-    if key & 0xFF == ord('q'):
+    if key & 0xFF == ord("q"):
         break
-    elif key & 0xFF == ord('n'):
+    elif key & 0xFF == ord("n"):
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         face_encodings = face_recognition.face_encodings(rgb_frame)
 
