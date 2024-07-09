@@ -8,7 +8,7 @@ sleep(5)
 
 picam2.start_and_capture_files("images{:d}.jpg", num_files=3, delay=0.5)
 
-picam2.start_and_record_video("new_video.mp4", duration=5, show_preview=True)
+picam2.start_and_record_video("new_video.mp4", duration=5, show_preview=False)
 
 
 picam2.close()
