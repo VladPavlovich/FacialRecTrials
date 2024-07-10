@@ -60,10 +60,17 @@ def send_name_to_api(name):
     url = 'http://3.138.158.57:8000/names'
     payload = {'name': name}
     try:
+        print("Attempting to send name to API...")
         response = requests.post(url, json=payload)
+        # Check if the request was successful
+        if response.status_code == 200:
+            print("Successfully sent name to API.")
+        else:
+            print(f"Failed to send name to API, status code: {response.status_code}")
         print("Response from API:", response.text)
     except requests.RequestException as e:
-        print("Failed to send data to API:", e)
+        print(f"Exception occurred when sending data to API: {e}")
+
 
 # Initialize SimpleFacerec with a specific threshold value
 sfr = SimpleFacerec(threshold=0.5)
