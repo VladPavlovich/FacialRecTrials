@@ -88,7 +88,7 @@ filedescriptors = termios.tcgetattr(sys.stdin)
 tty.setcbreak(sys.stdin)
 typedkey = ""
 
-print("!~Starting up camera~!")
+print("**---------------- Starting the camera up ----------------**")
 
 while typedkey == "":
     frame = picam2.capture_array()
@@ -131,12 +131,10 @@ while typedkey == "":
     x = sys.stdin.read(1)[0]
     print("You pressed", x)
     if x == "r":
-        print("If condition is met")
-    if x == "r":
         typedkey = "o"
 
 termios.tcsetattr(sys.stdin, termios.TCSADRAIN, filedescriptors)
 picam2.close()
-print("Camera has been turned off")
+print("Camera has been turned off, you can use the camera again")
 
 cv2.destroyAllWindows()
