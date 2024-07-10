@@ -76,7 +76,7 @@ def on_connect(client, userdata, flags, rc):
         print("Failed to connect, return code %d\n", rc)
 
 
-mqtt_client = mqtt.Client("RaspberryPi")
+mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, "RaspberryPi")
 mqtt_client.on_connect = on_connect
 
 mqtt_client.connect(broker_address, port, 60)
