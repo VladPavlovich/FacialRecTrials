@@ -105,7 +105,7 @@ while typedkey == "":
     key = cv2.waitKey(1)
     if key & 0xFF == ord('q'):
         break
-    elif key & 0xFF == ord('n'):
+    elif key == ('n'):
         start_time = time.time()
         # Capture current frame for new face encoding
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
