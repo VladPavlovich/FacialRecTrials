@@ -57,7 +57,7 @@ class SimpleFacerec:
         return face_locations, face_names
 
 def send_name_to_api(name):
-    url = 'http://http://18.118.28.169/names'
+    url = 'http://18.118.28.169:8000/names'
     payload = {'name': name}
     try:
         print("Attempting to send name to API...")
@@ -88,7 +88,7 @@ filedescriptors = termios.tcgetattr(sys.stdin)
 tty.setcbreak(sys.stdin)
 typedkey = ""
 
-print("**---------------- Starting the camera up ----------------**")
+print("!~Starting up camera~!")
 
 while typedkey == "":
     frame = picam2.capture_array()
@@ -131,10 +131,12 @@ while typedkey == "":
     x = sys.stdin.read(1)[0]
     print("You pressed", x)
     if x == "r":
+        print("If condition is met")
+    if x == "r":
         typedkey = "o"
 
 termios.tcsetattr(sys.stdin, termios.TCSADRAIN, filedescriptors)
 picam2.close()
-print("Camera has been turned off, you can use the camera again")
+print("Camera has been turned off")
 
 cv2.destroyAllWindows()
