@@ -7,6 +7,9 @@ from picamera2 import Picamera2, Preview
 import time
 import tty, sys, termios
 import requests
+import pyaudio
+import wave
+import speech_recognition as sr
 
 class SimpleFacerec:
     def __init__(self, threshold=0.8):
@@ -57,7 +60,7 @@ class SimpleFacerec:
         return face_locations, face_names
 
 def send_name_to_api(name):
-    url = 'http://http://18.118.28.169/names'
+    url = 'http://3.138.158.57:8000/names'
     payload = {'name': name}
     try:
         print("Attempting to send name to API...")
@@ -71,6 +74,70 @@ def send_name_to_api(name):
     except requests.RequestException as e:
         print(f"Exception occurred when sending data to API: {e}")
 
+def record_audio(duration=60, output_file="output.wav"):
+    # Record audio for a given duration and save to a file
+    chunk = 1024
+    sample_format = pyaudio.paInt16
+    channels = 1
+    fs = 44100
+    filename = output_file
+
+    p = pyaudio.PyAudio()
+    stream = p.open(format=sample_format,
+                    channels=channels,
+                    rate=fs,
+                    frames_per_buffer=chunk,
+                    input=True)
+
+    print('Recording...')
+
+    frames = []
+
+    for i in range(0, int(fs / chunk * duration)):
+        data = stream.read(chunk)
+        frames.append(data)
+
+    print('Finished recording.')
+
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+
+    wf = wave.open(filename, 'wb')
+    wf.setnchannels(channels)
+    wf.setsampwidth(p.get_sample_size(sample_format))
+    wf.setframerate(fs)
+    wf.writeframes(b''.join(frames))
+    wf.close()
+
+def transcribe_audio(audio_file):
+    recognizer = sr.Recognizer()
+    with sr.AudioFile(audio_file) as source:
+        audio = recognizer.record(source)
+    try:
+        transcription = recognizer.recognize_sphinx(audio)
+        print("Transcription: " + transcription)
+        return transcription
+    except sr.UnknownValueError:
+        print("Sphinx could not understand audio")
+        return ""
+    except sr.RequestError as e:
+        print("Sphinx error; {0}".format(e))
+        return ""
+
+def send_transcription_to_api(transcription):
+    url = 'http://3.138.158.57:8000/transcriptions'
+    payload = {'transcription': transcription}
+    try:
+        print("Attempting to send transcription to API...")
+        response = requests.post(url, json=payload)
+        if response.status_code == 200:
+            print("Successfully sent transcription to API.")
+        else:
+            print(f"Failed to send transcription to API, status code: {response.status_code}")
+        print("Response from API:", response.text)
+    except requests.RequestException as e:
+        print(f"Exception occurred when sending data to API: {e}")
 
 # Initialize SimpleFacerec with a specific threshold value
 sfr = SimpleFacerec(threshold=0.5)
@@ -107,6 +174,13 @@ while typedkey == "":
             print(f"Recognized: {name}, time elapsed: {end_time - start_time}")  # Print the recognized name to the terminal
             if name != "Unknown":
                 send_name_to_api(name)  # Send the recognized name to the API
+            else:
+                # Record and transcribe audio when an unknown person is detected
+                audio_file = "output.wav"
+                record_audio(output_file=audio_file)
+                transcription = transcribe_audio(audio_file)
+                if transcription:  # Check if transcription is not empty
+                    send_transcription_to_api(transcription)
 
     except Exception as e:
         print(f"Error processing frame: {e}")
