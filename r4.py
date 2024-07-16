@@ -107,7 +107,7 @@ while typedkey == "":
     if x == ('q'):
         break
     elif x == ('n'):
-        start_time = time.time()
+        
         # Capture current frame for new face encoding
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         face_encodings = face_recognition.face_encodings(rgb_frame)
@@ -117,7 +117,8 @@ while typedkey == "":
             new_encoding = face_encodings[0]
             # Prompt for the name in the console
             name = input("Enter name: ")
-            if name:
+            if name != "":
+                start_time = time.time()
                 sfr.known_face_encodings.append(new_encoding)
                 sfr.known_face_names.append(name)
                 sfr.save_encodings()  # Save the new encoding
