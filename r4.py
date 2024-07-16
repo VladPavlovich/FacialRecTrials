@@ -101,13 +101,15 @@ while typedkey == "":
         print(f"Error processing frame: {e}")
 
     # cv2.imshow("Frame", frame)
-    x=sys.stdin.read(1)[0]    
+    
+    x=sys.stdin.read(1)[0]   
+    print("You pressed", x)
 
-    key = cv2.waitKey(1)
-    if x == ('q'):
+    # key = cv2.waitKey(1)
+    if x == ('q'): # quits the program
         break
-    elif x == ('n'):
         
+    elif x == ('n'):
         # Capture current frame for new face encoding
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         face_encodings = face_recognition.face_encodings(rgb_frame)
@@ -127,9 +129,7 @@ while typedkey == "":
             else:
                 print("oops, didn't add a name for the encoding")
 
-      
-    print("You pressed", x)
-    if x == "r":
+    if x == "r": # also quits the program
         typedkey = "o"
 
 termios.tcsetattr(sys.stdin, termios.TCSADRAIN, filedescriptors)
