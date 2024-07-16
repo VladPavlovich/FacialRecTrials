@@ -103,7 +103,7 @@ while typedkey == "":
     # cv2.imshow("Frame", frame)
 
     key = cv2.waitKey(1)
-    if key & 0xFF == ord('q'):
+    if x == ('q'):
         break
     elif x == ('n'):
         start_time = time.time()
@@ -116,16 +116,17 @@ while typedkey == "":
             new_encoding = face_encodings[0]
             # Prompt for the name in the console
             name = input("Enter name: ")
-            sfr.known_face_encodings.append(new_encoding)
-            sfr.known_face_names.append(name)
-            sfr.save_encodings()  # Save the new encoding
-            end_time = time.time()
-            print(f"Saved new person: {name}, time elapsed: {end_time - start_time}") 
+            if name:
+                sfr.known_face_encodings.append(new_encoding)
+                sfr.known_face_names.append(name)
+                sfr.save_encodings()  # Save the new encoding
+                end_time = time.time()
+                print(f"Saved new person: {name}, time elapsed: {end_time - start_time}") 
+            else:
+                print("oops, didn't add a name for the encoding")
 
       
     print("You pressed", x)
-    if x == "r":
-        print("If condition is met")
     if x == "r":
         typedkey = "o"
 
