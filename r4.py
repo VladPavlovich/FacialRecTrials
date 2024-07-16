@@ -105,7 +105,7 @@ while typedkey == "":
     key = cv2.waitKey(1)
     if key & 0xFF == ord('q'):
         break
-    elif key == ('n'):
+    elif x == ('n'):
         start_time = time.time()
         # Capture current frame for new face encoding
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -121,7 +121,7 @@ while typedkey == "":
             sfr.save_encodings()  # Save the new encoding
             end_time = time.time()
             print(f"Saved new person: {name}, time elapsed: {end_time - start_time}") 
-        typedkey = ""
+
       
     print("You pressed", x)
     if x == "r":
