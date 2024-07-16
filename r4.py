@@ -83,7 +83,7 @@ while typedkey == "":
     frame = picam2.capture_array()
     start_time = time.time()
 
-    x=sys.stdin.read(1)[0]    
+   
   
     try:
         # Detect Faces
@@ -101,6 +101,7 @@ while typedkey == "":
         print(f"Error processing frame: {e}")
 
     # cv2.imshow("Frame", frame)
+    x=sys.stdin.read(1)[0]    
 
     key = cv2.waitKey(1)
     if x == ('q'):
