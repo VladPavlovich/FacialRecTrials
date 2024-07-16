@@ -76,7 +76,7 @@ time.sleep(2)  # Allow the camera to warm up
 filedescriptors = termios.tcgetattr(sys.stdin)
 tty.setcbreak(sys.stdin)
 x = 0
-typedkey = "";
+typedkey = ""
 print("!~Starting up camera~!")
 
 while typedkey == "":
@@ -121,6 +121,7 @@ while typedkey == "":
             sfr.save_encodings()  # Save the new encoding
             end_time = time.time()
             print(f"Saved new person: {name}, time elapsed: {end_time - start_time}") 
+        typedkey = ""
       
     print("You pressed", x)
     if x == "r":
