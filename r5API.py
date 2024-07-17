@@ -111,10 +111,13 @@ while typedkey == "":
     except Exception as e:
         print(f"Error processing frame: {e}")
 
-    key = cv2.waitKey(1)
-    if key & 0xFF == ord('q'):
+    x=sys.stdin.read(1)[0]   
+    print("You pressed", x)
+    
+    if x == ('q'): # quits the program
         break
-    elif key & 0xFF == ord('n'):
+        
+    elif x == ('n'):
         # Capture current frame for new face encoding
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         face_encodings = face_recognition.face_encodings(rgb_frame)
@@ -124,15 +127,17 @@ while typedkey == "":
             new_encoding = face_encodings[0]
             # Prompt for the name in the console
             name = input("Enter name: ")
-            sfr.known_face_encodings.append(new_encoding)
-            sfr.known_face_names.append(name)
-            sfr.save_encodings()  # Save the new encoding
+            if name != "":
+                start_time = time.time()
+                sfr.known_face_encodings.append(new_encoding)
+                sfr.known_face_names.append(name)
+                sfr.save_encodings()  # Save the new encoding
+                end_time = time.time()
+                print(f"Saved new person: {name}, time elapsed: {end_time - start_time}") 
+            else:
+                print("oops, didn't add a name for the encoding")
 
-    x = sys.stdin.read(1)[0]
-    print("You pressed", x)
-    if x == "r":
-        print("If condition is met")
-    if x == "r":
+    if x == "r": # also quits the program
         typedkey = "o"
 
 termios.tcsetattr(sys.stdin, termios.TCSADRAIN, filedescriptors)
